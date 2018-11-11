@@ -10,7 +10,16 @@ function bindModalWindows(modalWindow) {
             coverDiv.style.zIndex = -9000;
         }
     }
-}
+};
+
+function hideModalWindow()
+{
+    var coverDiv = document.getElementsByClassName('cover-div')[0],
+        modalWindow = document.getElementsByClassName("modalWindow")[0];
+
+    modalWindow.style.opacity = 0;
+    coverDiv.style.zIndex = -9000;
+};
 
 function bindButterflyControls(form){
     var availableColumn = 'Available',
@@ -47,49 +56,56 @@ function bindButterflyControls(form){
         }
 
         if(button === allRight){
-            while(objAvl.options.length !== 0){
-                objSel.options[objSel.options.length] = objAvl.options[0];
-            }
-
-            rightBtn.classList.add(useless);
+            moveAllOption(objAvl, objSel, rightBtn);
         }
 
         if(button === rightButton){
-            if(objAvl.selectedIndex === -1){
-                coverDiv.style.zIndex = 9000;
-                modalWindow.style.opacity = 1;
-                //alert("Нет выбранных элементов");
-                return;
-            }
-            objSel.options[objSel.options.length] = objAvl.options[objAvl.selectedIndex];
-
-            rightBtn.classList.add(useless);
-
-            leftBtn.classList.remove(useless);
+            moveOneOption(objAvl, objSel, rightBtn, leftBtn);
         }
 
         if(button === leftButton){
-            if(objSel.selectedIndex === -1){
-                coverDiv.style.zIndex = 9000;
-                modalWindow.style.opacity = 1;
-                //alert("Нет выбранных элементов");
-                return;
-            }
-            objAvl.options[objAvl.options.length] = objSel.options[objSel.selectedIndex];
-
-            leftBtn.classList.add(useless);
-
-            rightBtn.classList.remove(useless);
+            moveOneOption(objSel, objAvl, leftBtn, rightBtn);
         }
 
         if(button === allLeft){
-            while(objSel.options.length !== 0){
-                objAvl.options[objAvl.options.length] = objSel.options[0];
-            }
-
-            leftBtn.classList.add(useless);
+            moveAllOption(objSel, objAvl, leftBtn);
         }
     }
+};
+
+function moveOneOption(sourceObj, destinationObj, clickedBtn, unClickedBtn){
+    var useless = "useless",
+        selectedIndex = sourceObj.selectedIndex;
+
+    if(sourceObj.selectedIndex === -1){
+        showModalWindow();
+        return;
+    }
+    destinationObj.options[destinationObj.options.length] = sourceObj.options[selectedIndex];
+
+    clickedBtn.classList.add(useless);
+
+    unClickedBtn.classList.remove(useless);
+};
+
+function moveAllOption(sourceObj, destinationObj, uselessBtn)
+{
+    var useless = "useless";
+
+    while(sourceObj.options.length !== 0){
+        destinationObj.options[destinationObj.options.length] = sourceObj.options[0];
+    }
+
+    uselessBtn.classList.add(useless);
+};
+
+function showModalWindow()
+{
+    var coverDiv = document.getElementsByClassName('cover-div')[0],
+        modalWindow = document.getElementsByClassName("modalWindow")[0];
+
+    coverDiv.style.zIndex = 9000;
+    modalWindow.style.opacity = 1;
 };
 
 window.onload = function () {
