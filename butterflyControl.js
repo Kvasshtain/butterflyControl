@@ -83,9 +83,9 @@ function moveOneOption(sourceObj, destinationObj, clickedBtn, unClickedBtn){
     }
     destinationObj.options[destinationObj.options.length] = sourceObj.options[selectedIndex];
 
-    clickedBtn.classList.add(useless);
+    destinationObj.selectedIndex = -1;
 
-    unClickedBtn.classList.remove(useless);
+    clickedBtn.classList.add(useless);
 };
 
 function moveAllOption(sourceObj, destinationObj, uselessBtn)
@@ -95,6 +95,8 @@ function moveAllOption(sourceObj, destinationObj, uselessBtn)
     while(sourceObj.options.length !== 0){
         destinationObj.options[destinationObj.options.length] = sourceObj.options[0];
     }
+
+    destinationObj.selectedIndex = -1;
 
     uselessBtn.classList.add(useless);
 };
