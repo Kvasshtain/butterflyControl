@@ -1,41 +1,41 @@
+var modalWindowName = "modalWindow",
+    coverDivName = "cover-div",
+    okButtonName = "okButton";
+
 function bindModalWindows(modalWindow) {
-    var ok = 'ok';
+    var okButton = document.getElementById(okButtonName);
 
-    modalWindow.onclick = function(event) {
-        var button = event.srcElement.classList[0],
-            coverDiv = document.getElementsByClassName('cover-div')[0];
+    okButton.onclick = function(event) {
+        var coverDiv = document.getElementById(coverDivName);
 
-        if(button === ok) {
-            modalWindow.style.opacity = 0;
-            coverDiv.style.zIndex = -9000;
-        }
+        modalWindow.style.opacity = 0;
+        coverDiv.style.zIndex = -9000;
     }
 };
 
 function hideModalWindow()
 {
-    var coverDiv = document.getElementsByClassName('cover-div')[0],
-        modalWindow = document.getElementsByClassName("modalWindow")[0];
+    var coverDiv = document.getElementById(coverDivName),
+        modalWindow = document.getElementById(modalWindowName);
 
     modalWindow.style.opacity = 0;
     coverDiv.style.zIndex = -9000;
 };
 
-function bindButterflyControls(form){
-    var availableColumn = 'Available',
-        selectedColumn = 'Selected',
-        rightButton = 'Right',
-        leftButton = 'Left',
-        allRight = 'AllRight',
-        allLeft = 'AllLeft',
-        ok = 'ok',
-        objAvl = form.getElementsByClassName(availableColumn)[0],
-        objSel = form.getElementsByClassName(selectedColumn)[0],
-        rightBtn = form.getElementsByClassName(rightButton)[0],
-        leftBtn = form.getElementsByClassName(leftButton)[0],
+function bindButterflyControls(form, i){
+    var availableColumn = 'Available' + i,
+        selectedColumn = 'Selected' + i,
+        rightButton = 'Right' + i,
+        leftButton = 'Left' + i,
+        allRight = 'AllRight' + i,
+        allLeft = 'AllLeft' + i,
+        objAvl = document.querySelector("#" + availableColumn),//form.getElementsByClassName(availableColumn)[0],
+        objSel = document.querySelector("#" + selectedColumn),//form.getElementsByClassName(selectedColumn)[0],
+        rightBtn = document.querySelector("#" + rightButton),//form.getElementsByClassName(rightButton)[0],
+        leftBtn = document.querySelector("#" + leftButton),//form.getElementsByClassName(leftButton)[0],
         useless = "useless",
         hidden = "hidden",
-        modalWindow = document.getElementsByClassName("modalWindow")[0];
+        modalWindow = document.getElementById(modalWindowName);
 
     rightBtn.classList.add(useless);
 
@@ -43,9 +43,9 @@ function bindButterflyControls(form){
 
     form.onclick = function(event) {
 
-        var column = event.srcElement.parentElement.className,
-            button = event.srcElement.classList[0],
-            coverDiv = document.getElementsByClassName('cover-div')[0];
+        var column = event.srcElement.parentElement.id,
+            button = event.srcElement.id,//.classList[0],
+            coverDiv = document.getElementById(coverDivName);
 
         if(column === availableColumn){
             rightBtn.classList.remove(useless);
@@ -60,11 +60,11 @@ function bindButterflyControls(form){
         }
 
         if(button === rightButton){
-            moveOneOption(objAvl, objSel, rightBtn, leftBtn);
+            moveOneOption(objAvl, objSel, rightBtn);
         }
 
         if(button === leftButton){
-            moveOneOption(objSel, objAvl, leftBtn, rightBtn);
+            moveOneOption(objSel, objAvl, leftBtn);
         }
 
         if(button === allLeft){
@@ -73,7 +73,7 @@ function bindButterflyControls(form){
     }
 };
 
-function moveOneOption(sourceObj, destinationObj, clickedBtn, unClickedBtn){
+function moveOneOption(sourceObj, destinationObj, clickedBtn){
     var useless = "useless",
         selectedIndex = sourceObj.selectedIndex;
 
@@ -103,22 +103,20 @@ function moveAllOption(sourceObj, destinationObj, uselessBtn)
 
 function showModalWindow()
 {
-    var coverDiv = document.getElementsByClassName('cover-div')[0],
-        modalWindow = document.getElementsByClassName("modalWindow")[0];
+    var coverDiv = document.getElementById(coverDivName),
+        modalWindow = document.getElementById(modalWindowName);
 
     coverDiv.style.zIndex = 9000;
     modalWindow.style.opacity = 1;
 };
 
 window.onload = function () {
-    var forms = document.getElementsByClassName("butterflyCtrl"),
-        modalWindows = document.getElementsByClassName("modalWindow");
+    var forms = document.querySelectorAll("[id ^= butterflyCtrl]"),//forms = document.getElementsByClassName("butterflyCtrl"),
+        modalWindow = document.getElementById(modalWindowName);
 
     for(var i = 0; i < forms.length; i++){
-        bindButterflyControls(forms[i]);
+        bindButterflyControls(forms[i], i);
     }
 
-    for(var i = 0; i < modalWindows.length; i++) {
-        bindModalWindows(modalWindows[i]);
-    }
+    bindModalWindows(modalWindow);
 }
